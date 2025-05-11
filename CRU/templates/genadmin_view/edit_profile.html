@@ -5,28 +5,64 @@
 {% endblock title %}
 
 {% block content %}
-<main class="profile-container">
-  <h1>My Profile</h1>
-  <form class="profile-form" method="post" action="">
-    {% csrf_token %}
+<main class="bg-gray-50 min-h-screen py-8 px-4 md:px-8">
+  <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="bg-primary px-6 py-4">
+      <h2 class="text-lg font-semibold text-white">My Profile</h2>
+    </div>
     
-    <label for="first_name">First Name</label>
-    <input type="text" id="first_name" name="first_name" value="John">
-
-    <label for="last_name">Last Name</label>
-    <input type="text" id="last_name" name="last_name" value="Doe">
-
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" value="johndoe123@gmail.com">
-
-    <label for="new_password">Change Password</label>
-    <input type="password" id="new_password" name="new_password" placeholder="********">
-
-    <label for="confirm_password">Confirm New Password</label>
-    <input type="password" id="confirm_password" name="confirm_password" placeholder="********">
-
-    <button type="submit">Save Changes</button>
-  </form>
+    <div class="p-6">
+      <form class="space-y-6" method="post" action="">
+        {% csrf_token %}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Personal Information Section -->
+          <div class="space-y-4 md:col-span-2">
+            <h3 class="text-sm font-medium text-gray-700 border-b border-gray-200 pb-2">Personal Information</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="first_name" class="block text-xs font-medium text-gray-700 mb-1">First Name</label>
+                <input type="text" id="first_name" name="first_name" value="John" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary">
+              </div>
+              
+              <div>
+                <label for="last_name" class="block text-xs font-medium text-gray-700 mb-1">Last Name</label>
+                <input type="text" id="last_name" name="last_name" value="Doe" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary">
+              </div>
+            </div>
+            
+            <div>
+              <label for="email" class="block text-xs font-medium text-gray-700 mb-1">Email</label>
+              <input type="email" id="email" name="email" value="johndoe123@gmail.com" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary">
+            </div>
+          </div>
+          
+          <!-- Password Section -->
+          <div class="space-y-4 md:col-span-2">
+            <h3 class="text-sm font-medium text-gray-700 border-b border-gray-200 pb-2">Change Password</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="new_password" class="block text-xs font-medium text-gray-700 mb-1">New Password</label>
+                <input type="password" id="new_password" name="new_password" placeholder="New Password" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary">
+                <p class="mt-1 text-xs text-gray-500">Leave blank to keep current password</p>
+              </div>
+              
+              <div>
+                <label for="confirm_password" class="block text-xs font-medium text-gray-700 mb-1">Confirm New Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm New Password" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex justify-end pt-4">
+          <button type="submit" class="bg-primary hover:bg-secondary text-white py-2 px-4 rounded-md shadow-sm transition duration-150 ease-in-out text-xs font-medium">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </main>
 {% endblock %}
 
