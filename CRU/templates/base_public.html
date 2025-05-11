@@ -7,8 +7,27 @@
   <link rel="stylesheet" href="{% static 'styles.css'%}">
   <!-- Poppins font -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#26366D',
+            secondary: '#0A2566',
+            light: '#d1d5db',
+            dark: '#2b2b2b',
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
 </head>
 <body>
 <header>
@@ -19,7 +38,7 @@
         <ul class="user-navbar-links">
           <li><a href="{% url 'CRU:Home' %}" class="{% if request.resolver_match.url_name == 'Home' %}active{% endif %}">Home</a></li>
           <li><a href="{% url 'CRU:About' %}" class="{% if request.resolver_match.url_name == 'About' %}active{% endif %}">About</a></li>
-          <li><a href="#" class="{% if request.resolver_match.url_name == 'Contact' %}active{% endif %}">Contact</a></li>
+          <li><a href="#contact" class="{% if request.resolver_match.url_name == 'Contact' %}active{% endif %}">Contact</a></li>
           <li><a href="{% url 'CRU:Search' %}" class="{% if request.resolver_match.url_name == 'Search' %}active{% endif %}">Search</a></li>
         </ul>
         <div id="bar">&#9776;</div>
@@ -28,42 +47,65 @@
 
 {% block content %}
 {% endblock %}
-<footer class="footer">
-  <div class="footer-container">
-    <div class="footer-column logo-section">
-      <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="logo">
-      <p class="description">
+<footer id="contact" style="background-color: #27305c;" class="text-white py-6 px-4">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-8 md:gap-16">
+    <!-- Main info column -->
+    <div class="w-full max-w-xs md:max-w-sm">
+      <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="w-32 mb-2">
+      <p class="text-light text-xs mb-2">
         The official student publication of Xavier University – Ateneo de Cagayan
       </p>
-      <p><strong>Contact</strong></p>
-      <p><strong>Address:</strong> STC 302, Xavier University - Ateneo de Cagayan, Cagayan de Oro, Philippines</p>
-      <p><strong>Email:</strong> <a href="mailto:crusaderpublication@my.xu.edu.ph">crusaderpublication@my.xu.edu.ph</a></p>
-      <p class="social-label"><strong>Follow us!</strong></p>
-      <div class="social-icons">
-        <a href="https://www.facebook.com/thecrusaderpublication"><img src="{% static 'fb-icon.png' %}" alt="Facebook" /></a>
-        <a href="https://www.instagram.com/thecrusaderpub/"><img src="{% static 'ig-icon.png' %}" alt="Instagram" /></a>
-        <a href="https://x.com/thecrusaderpub"><img src="{% static 'x-icon.png' %}" alt="Twitter" /></a>
-        <a href="https://www.tiktok.com/@thecrusaderpub"><img src="{% static 'tiktok-icon.png' %}" alt="TikTok" /></a>
+      <div class="text-xs space-y-1">
+        <p><strong>Contact</strong></p>
+        <p><strong>Address:</strong> STC 302, Xavier University - Ateneo de Cagayan, Cagayan de Oro</p>
+        <p><strong>Email:</strong> <a href="mailto:crusaderpublication@my.xu.edu.ph" class="hover:text-white hover:underline">crusaderpublication@my.xu.edu.ph</a></p>
+      </div>
+      <p class="text-xs mt-2 mb-1"><strong>Follow us!</strong></p>
+      <div class="flex gap-3 items-center">
+        <a href="https://www.facebook.com/thecrusaderpublication" class="transition-transform hover:scale-110"><img src="{% static 'fb-icon.png' %}" alt="Facebook" class="w-3.5 h-3.5 object-contain" /></a>
+        <a href="https://www.instagram.com/thecrusaderpub/" class="transition-transform hover:scale-110"><img src="{% static 'ig-icon.png' %}" alt="Instagram" class="w-3.5 h-3.5 object-contain" /></a>
+        <a href="https://x.com/thecrusaderpub" class="transition-transform hover:scale-110"><img src="{% static 'x-icon.png' %}" alt="Twitter" class="w-3.5 h-3.5 object-contain" /></a>
+        <a href="https://www.tiktok.com/@thecrusaderpub" class="transition-transform hover:scale-110"><img src="{% static 'tiktok-icon.png' %}" alt="TikTok" class="w-3.5 h-3.5 object-contain" /></a>
       </div>
     </div>
 
-    <div class="footer-column">
-      <h4>About</h4>
-      <a href="#">About Us</a>
-      <a href="#">Contact Us</a>
+    <!-- About column -->
+    <div class="mt-6 md:mt-0 px-4 md:px-0">
+      <h4 class="text-sm font-semibold mb-2">About</h4>
+      <div class="space-y-1">
+        <a href="#" class="block text-light text-xs hover:text-white hover:underline">About Us</a>
+        <a href="#" class="block text-light text-xs hover:text-white hover:underline">Contact Us</a>
+      </div>
     </div>
 
-    <div class="footer-column">
-      <h4>Magazines</h4>
-      <a href="https://issuu.com/thecrusaderpub">The Crusader Publication ISSUU</a>
-      <a href="https://issuu.com/thecrusaderpub/docs/the_crusader_sports_magazine_2024">Latest Release</a>
+    <!-- Magazines column -->
+    <div class="mt-6 md:mt-0 px-4 md:px-0">
+      <h4 class="text-sm font-semibold mb-2">Magazines</h4>
+      <div class="space-y-1">
+        <a href="https://issuu.com/thecrusaderpub" class="block text-light text-xs hover:text-white hover:underline">The Crusader Publication ISSUU</a>
+        <a href="https://issuu.com/thecrusaderpub/docs/the_crusader_sports_magazine_2024" class="block text-light text-xs hover:text-white hover:underline">Latest Release</a>
+      </div>
     </div>
   </div>
 
-  <div class="footer-bottom">
-    <p>© 2025 The Crusader Publication All Rights Reserved</p>
+  <div class="text-center mt-5 pt-3 text-xs text-light max-w-6xl mx-auto">
+    <p class="mb-0.5">© 2025 The Crusader Publication All Rights Reserved</p>
     <p>Designed and developed by JDR Tech Devs 2024–2025</p>
   </div>
 </footer>
+<!-- Mobile menu toggle script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuButton = document.getElementById('bar');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (menuButton && mobileMenu) {
+      menuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+  });
+</script>
 </body>
 </html>
+
