@@ -5,78 +5,373 @@
 {% endblock title %}
 
 {% block content %}
-  <main class="main-content">
-    <h2>User List</h2>
-    <div class="filters">
-      <select>
-        <option>Sort by A-Z</option>
-        <option>Sort by Z-A</option>
-      </select>
-      <select>
-        <option>Editorial Board</option>
-        <option>Copyreader</option>
-        <option>General Staff</option>
-      </select>
-      <button class="add-user-btn">Add User</button>
-    </div>
+  <main class="bg-gray-50 min-h-screen py-8 px-4 md:px-8">
+    <style>
+      .dropdown-top {
+        bottom: 100% !important;
+        top: auto !important;
+        margin-bottom: 0.5rem !important;
+      }
+      .role-dropdown {
+        position: absolute;
+        z-index: 50;
+      }
+    </style>
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4 md:mb-0">User List</h2>
+        
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative">
+            <select class="appearance-none bg-white border border-gray-300 text-gray-700 py-2 pl-3 pr-10 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm">
+              <option>Sort by A-Z</option>
+              <option>Sort by Z-A</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+          
+          <div class="relative">
+            <select class="appearance-none bg-white border border-gray-300 text-gray-700 py-2 pl-3 pr-10 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm">
+              <option>All Roles</option>
+              <option>Editorial Board</option>
+              <option>Copyreader</option>
+              <option>General Staff</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+          
+          <button class="bg-primary hover:bg-secondary text-white py-2 px-4 rounded-md shadow-sm transition duration-150 ease-in-out text-sm font-medium flex items-center">
+            <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            Add User
+          </button>
+        </div>
+      </div>
 
-    <!-- User Table -->
-    <div class="user-table">
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>User ID</th>
-            <th>Role</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>John Doe</td>
-            <td>johndoe@gmail.com</td>
-            <td>10001</td>
-            <td><span class="badge copyreader">Copyreader</span></td>
-            <td><i class="fas fa-trash delete-icon"></i></td>
-          </tr>
-          <tr>
-            <td>Taylor Swift</td>
-            <td>taylorswift@gmail.com</td>
-            <td>10002</td>
-            <td><span class="badge editorial">Editorial Board</span></td>
-            <td><i class="fas fa-trash delete-icon"></i></td>
-          </tr>
-          <tr>
-            <td>Olivia Rodrigo</td>
-            <td>oliviarodrigo@gmail.com</td>
-            <td>10003</td>
-            <td><span class="badge staff">General Staff</span></td>
-            <td><i class="fas fa-trash delete-icon"></i></td>
-          </tr>
-          <tr>
-            <td>Sakura Miyawaki</td>
-            <td>miyawakisakura@gmail.com</td>
-            <td>10004</td>
-            <td><span class="badge staff">General Staff</span></td>
-            <td><i class="fas fa-trash delete-icon"></i></td>
-          </tr>
-          <tr>
-            <td>Chaewon Kim</td>
-            <td>kimchaewon@gmail.com</td>
-            <td>10005</td>
-            <td><span class="badge staff">General Staff</span></td>
-            <td><i class="fas fa-trash delete-icon"></i></td>
-          </tr>
-          <tr>
-            <td>Mingyu Kim</td>
-            <td>mingyu@gmail.com</td>
-            <td>10006</td>
-            <td><span class="badge copyreader">Copyreader</span></td>
-            <td><i class="fas fa-trash delete-icon"></i></td>
-          </tr>
-        </tbody>
-      </table>
+      <!-- User Table -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User ID</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">John Doe</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">johndoe@gmail.com</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10001</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="relative inline-block text-left">
+                    <div>
+                      <button type="button" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" id="role-menu-button-1" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown('role-dropdown-1')">
+                        Copyreader
+                        <svg class="ml-1 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="hidden role-dropdown z-10 mt-1 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" id="role-dropdown-1" role="menu" aria-orientation="vertical" aria-labelledby="role-menu-button-1" tabindex="-1">
+                      <div class="py-1" role="none">
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Editorial Board')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Editorial Board</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Copyreader')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Copyreader</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'General Staff')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">General Staff</a>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <button class="text-red-600 hover:text-red-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Taylor Swift</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">taylorswift@gmail.com</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10002</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="relative inline-block text-left">
+                    <div>
+                      <button type="button" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800 hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" id="role-menu-button-2" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown('role-dropdown-2')">
+                        Editorial Board
+                        <svg class="ml-1 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="hidden role-dropdown z-10 mt-1 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" id="role-dropdown-2" role="menu" aria-orientation="vertical" aria-labelledby="role-menu-button-2" tabindex="-1">
+                      <div class="py-1" role="none">
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Editorial Board')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Editorial Board</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Copyreader')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Copyreader</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'General Staff')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">General Staff</a>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <button class="text-red-600 hover:text-red-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Olivia Rodrigo</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">oliviarodrigo@gmail.com</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10003</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="relative inline-block text-left">
+                    <div>
+                      <button type="button" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" id="role-menu-button-{{forloop.counter}}" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown('role-dropdown-{{forloop.counter}}')">
+                        General Staff
+                        <svg class="ml-1 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="hidden role-dropdown z-10 mt-1 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" id="role-dropdown-{{forloop.counter}}" role="menu" aria-orientation="vertical" aria-labelledby="role-menu-button-{{forloop.counter}}" tabindex="-1">
+                      <div class="py-1" role="none">
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Editorial Board')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Editorial Board</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Copyreader')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Copyreader</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'General Staff')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">General Staff</a>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <button class="text-red-600 hover:text-red-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Sakura Miyawaki</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">miyawakisakura@gmail.com</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10004</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="relative inline-block text-left">
+                    <div>
+                      <button type="button" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" id="role-menu-button-{{forloop.counter}}" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown('role-dropdown-{{forloop.counter}}')">
+                        General Staff
+                        <svg class="ml-1 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="hidden role-dropdown z-10 mt-1 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" id="role-dropdown-{{forloop.counter}}" role="menu" aria-orientation="vertical" aria-labelledby="role-menu-button-{{forloop.counter}}" tabindex="-1">
+                      <div class="py-1" role="none">
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Editorial Board')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Editorial Board</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Copyreader')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Copyreader</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'General Staff')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">General Staff</a>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <button class="text-red-600 hover:text-red-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Chaewon Kim</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">kimchaewon@gmail.com</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10005</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="relative inline-block text-left">
+                    <div>
+                      <button type="button" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" id="role-menu-button-{{forloop.counter}}" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown('role-dropdown-{{forloop.counter}}')">
+                        General Staff
+                        <svg class="ml-1 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="hidden role-dropdown z-10 mt-1 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" id="role-dropdown-{{forloop.counter}}" role="menu" aria-orientation="vertical" aria-labelledby="role-menu-button-{{forloop.counter}}" tabindex="-1">
+                      <div class="py-1" role="none">
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Editorial Board')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Editorial Board</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Copyreader')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Copyreader</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'General Staff')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">General Staff</a>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <button class="text-red-600 hover:text-red-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Mingyu Kim</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">mingyu@gmail.com</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10006</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="relative inline-block text-left">
+                    <div>
+                      <button type="button" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" id="role-menu-button-6" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown('role-dropdown-6')">
+                        Copyreader
+                        <svg class="ml-1 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="hidden role-dropdown z-10 mt-1 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" id="role-dropdown-6" role="menu" aria-orientation="vertical" aria-labelledby="role-menu-button-6" tabindex="-1">
+                      <div class="py-1" role="none">
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Editorial Board')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Editorial Board</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'Copyreader')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">Copyreader</a>
+                        <a href="javascript:void(0)" onclick="changeRole(this, 'General Staff')" class="text-gray-700 hover:bg-gray-100 block px-4 py-2 text-xs" role="menuitem" tabindex="-1">General Staff</a>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <button class="text-red-600 hover:text-red-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Pagination (optional) -->
+      <div class="mt-5 flex justify-between items-center">
+        <p class="text-sm text-gray-700">
+          Showing <span class="font-medium">1</span> to <span class="font-medium">6</span> of <span class="font-medium">6</span> users
+        </p>
+        <div class="flex gap-2">
+          <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50" disabled>Previous</button>
+          <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50" disabled>Next</button>
+        </div>
+      </div>
+      
+      <!-- JavaScript for dropdown functionality -->
+      <script>
+        function toggleDropdown(dropdownId) {
+          const dropdown = document.getElementById(dropdownId);
+          if (dropdown) {
+            // Close all other dropdowns first
+            document.querySelectorAll('[id^="role-dropdown-"]').forEach(element => {
+              if (element.id !== dropdownId) {
+                element.classList.add('hidden');
+              }
+            });
+            
+            // Toggle the current dropdown
+            dropdown.classList.toggle('hidden');
+            
+            // Check if this is one of the bottom rows (last 2 rows)
+            const rowNumber = parseInt(dropdownId.split('-')[2]);
+            if (rowNumber >= 5) { // For the last two rows (5 and 6)
+              // Position above the button
+              dropdown.classList.add('dropdown-top');
+              dropdown.style.bottom = '2rem';
+              dropdown.style.top = 'auto';
+            } else {
+              // Position below the button (default)
+              dropdown.classList.remove('dropdown-top');
+              dropdown.style.bottom = 'auto';
+              dropdown.style.top = '100%';
+            }
+          }
+        }
+        
+        // Function to change role
+        function changeRole(element, newRole) {
+          // Get the parent dropdown
+          const dropdown = element.closest('[id^="role-dropdown-"]');
+          if (!dropdown) return;
+          
+          const dropdownId = dropdown.id;
+          const rowId = dropdownId.split('-')[2];
+          const buttonId = 'role-menu-button-' + rowId;
+          const button = document.getElementById(buttonId);
+          
+          if (button) {
+            // Clear existing button content and create new content
+            while (button.firstChild) {
+              button.removeChild(button.firstChild);
+            }
+            
+            // Add the new role text
+            const textNode = document.createTextNode(newRole.trim() + ' ');
+            button.appendChild(textNode);
+            
+            // Add the dropdown arrow icon
+            const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svgElement.setAttribute('class', 'ml-1 -mr-0.5 h-4 w-4');
+            svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            svgElement.setAttribute('viewBox', '0 0 20 20');
+            svgElement.setAttribute('fill', 'currentColor');
+            svgElement.setAttribute('aria-hidden', 'true');
+            
+            const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pathElement.setAttribute('fill-rule', 'evenodd');
+            pathElement.setAttribute('d', 'M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z');
+            pathElement.setAttribute('clip-rule', 'evenodd');
+            
+            svgElement.appendChild(pathElement);
+            button.appendChild(svgElement);
+            
+            // Update button styling based on role
+            button.className = 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2';
+            
+            if (newRole.includes('Editorial Board')) {
+              button.classList.add('bg-purple-100', 'text-purple-800', 'hover:bg-purple-200', 'focus:ring-purple-500');
+              button.setAttribute('data-role-type', 'editorial');
+            } else if (newRole.includes('Copyreader')) {
+              button.classList.add('bg-blue-100', 'text-blue-800', 'hover:bg-blue-200', 'focus:ring-blue-500');
+              button.setAttribute('data-role-type', 'copyreader');
+            } else if (newRole.includes('General Staff')) {
+              button.classList.add('bg-green-100', 'text-green-800', 'hover:bg-green-200', 'focus:ring-green-500');
+              button.setAttribute('data-role-type', 'staff');
+            }
+            
+            // Hide the dropdown
+            dropdown.classList.add('hidden');
+            
+            console.log('Role updated to: ' + newRole);
+          }
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+          const isDropdownButton = event.target.closest('[id^="role-menu-button-"]');
+          if (!isDropdownButton) {
+            document.querySelectorAll('[id^="role-dropdown-"]').forEach(dropdown => {
+              dropdown.classList.add('hidden');
+            });
+          }
+        });
+      </script>
     </div>
   </main>
 {% endblock%}
