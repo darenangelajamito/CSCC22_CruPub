@@ -1,0 +1,57 @@
+{% extends 'base_eb.html' %}
+
+{% block title %}
+<title>Pending Dashboard</title>
+{% endblock title %}
+
+{% block content %}
+<main class="pending-section">
+  <div class="pending-header">
+    <h2>Pending Articles</h2>
+    <a href="{% url 'CRU:NewArticle' %}" class="create-button">Create</a>
+  </div>
+
+  <div class="article-grid">
+    <!-- Article Cards -->
+    <div class="article-card">
+      <div class="image-placeholder"></div>
+      <div class="article-info">
+        <span class="category-universitynews">UNIVERSITY NEWS</span>
+        <h3 class="title">Lorem Ipsum Dolor Sit Amet</h3>
+        <p class="author">BY AUTHOR NAME</p>
+        <p class="approval approved-all">✓ APPROVED BY EDITORIAL BOARD AND COPYREADER</p>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="image-placeholder"></div>
+      <div class="article-info">
+        <span class="category-universitynews">UNIVERSITY NEWS</span>
+        <h3 class="title">Lorem Ipsum Dolor Sit Amet</h3>
+        <p class="author">BY AUTHOR NAME</p>
+        <p class="approval approved-all">✓ APPROVED BY EDITORIAL BOARD AND COPYREADER</p>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="image-placeholder"></div>
+      <div class="article-info">
+        <span class="category-universitynews">UNIVERSITY NEWS</span>
+        <h3 class="title">Lorem Ipsum Dolor Sit Amet</h3>
+        <p class="author">BY AUTHOR NAME</p>
+        <p class="approval approved-all">✓ APPROVED BY EDITORIAL BOARD AND COPYREADER</p>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="image-placeholder"></div>
+      <div class="article-info">
+        <span class="category-universitynews">UNIVERSITY NEWS</span>
+        <h3 class="title">Student Festivities and Activities</h3>
+        <p class="author">BY JANE DOE</p>
+        <p class="approval approved-editor">✓ APPROVED BY EDITORIAL BOARD ONLY</p>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

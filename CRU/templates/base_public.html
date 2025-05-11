@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  {% block title %}{% endblock title %}
+  <link rel="stylesheet" href="{% static 'styles.css'%}">
+  <!-- Poppins font -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+</head>
+<body>
+<header>
+    <nav id="user-navbar" class="user-navbar">
+        <div class="user-navbar-logo">
+          <img src="{% static 'TheCrusaderBlue.png' %}" alt="The Crusader Logo">
+        </div>
+        <ul class="user-navbar-links">
+          <li><a href="{% url 'CRU:Home' %}" class="{% if request.resolver_match.url_name == 'Home' %}active{% endif %}">Home</a></li>
+          <li><a href="{% url 'CRU:About' %}" class="{% if request.resolver_match.url_name == 'About' %}active{% endif %}">About</a></li>
+          <li><a href="#" class="{% if request.resolver_match.url_name == 'Contact' %}active{% endif %}">Contact</a></li>
+          <li><a href="{% url 'CRU:Search' %}" class="{% if request.resolver_match.url_name == 'Search' %}active{% endif %}">Search</a></li>
+        </ul>
+        <div id="bar">&#9776;</div>
+      </nav>
+</header>
+
+{% block content %}
+{% endblock %}
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column logo-section">
+      <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="logo">
+      <p class="description">
+        The official student publication of Xavier University – Ateneo de Cagayan
+      </p>
+      <p><strong>Contact</strong></p>
+      <p><strong>Address:</strong> STC 302, Xavier University - Ateneo de Cagayan, Cagayan de Oro, Philippines</p>
+      <p><strong>Email:</strong> <a href="mailto:crusaderpublication@my.xu.edu.ph">crusaderpublication@my.xu.edu.ph</a></p>
+      <p class="social-label"><strong>Follow us!</strong></p>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/thecrusaderpublication"><img src="{% static 'fb-icon.png' %}" alt="Facebook" /></a>
+        <a href="https://www.instagram.com/thecrusaderpub/"><img src="{% static 'ig-icon.png' %}" alt="Instagram" /></a>
+        <a href="https://x.com/thecrusaderpub"><img src="{% static 'x-icon.png' %}" alt="Twitter" /></a>
+        <a href="https://www.tiktok.com/@thecrusaderpub"><img src="{% static 'tiktok-icon.png' %}" alt="TikTok" /></a>
+      </div>
+    </div>
+
+    <div class="footer-column">
+      <h4>About</h4>
+      <a href="#">About Us</a>
+      <a href="#">Contact Us</a>
+    </div>
+
+    <div class="footer-column">
+      <h4>Magazines</h4>
+      <a href="https://issuu.com/thecrusaderpub">The Crusader Publication ISSUU</a>
+      <a href="https://issuu.com/thecrusaderpub/docs/the_crusader_sports_magazine_2024">Latest Release</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 The Crusader Publication All Rights Reserved</p>
+    <p>Designed and developed by JDR Tech Devs 2024–2025</p>
+  </div>
+</footer>
+</body>
+</html>

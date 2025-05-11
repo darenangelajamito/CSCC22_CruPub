@@ -1,0 +1,134 @@
+{% extends 'base_eb.html' %}
+{% block title%}
+    <title>New Article</title>
+{% endblock title %}
+{% block content %}
+<form id="articleForm" method="post">
+    {% csrf_token %}
+    <div class="form-group mb-4">
+        <label for="title" class="form-label">Title:</label>
+        <input type="text" id="title" name="title" class="form-control" required>
+    </div>
+    <div class="form-group mb-4">
+        <label for="category" class="form-label">Category:</label>
+        <select id="category" name="category" class="form-control" required>
+            {% for category in categories %}
+            <option value="{{ category.category_id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group mb-4">
+        <label for="content" class="form-label">Content:</label><br/>
+        <textarea id="content" name="content" class="form-control" style="height: 500px; width: 800px;"></textarea>
+    </div>
+    <div class="text-center mb-4">
+        <label for="featureImage" class="form-label">Feature Image:</label>
+        <input type="file" id="featureImage" name="featureImage" class="form-control">
+        <div id="imagePreview" class="mt-2" style="height: 300px; width: 400px; display: none;">
+            <img id="previewImg" src="#" style="max-height: 100%; max-width: 100%;"/>
+        </div>
+    </div>
+    
+    <div class="form-group mb-4">
+        <label for="journalist" class="form-label">Photo Journalist:</label>
+        <input type="text" id="journalist" name="journalist" class="form-control">
+    </div>
+    <button type="submit" id="submitArticle" class="btn btn-primary">Submit</button>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize CKEditor on the content field
+            ClassicEditor
+                .create(document.querySelector('#content'), {
+                    toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote', 'insertTable', 'undo', 'redo'],
+                    link: {
+                        addTargetToExternalLinks: true,
+                        defaultProtocol: 'https://',
+                        decorators: {
+                            openInNewTab: {
+                                mode: 'manual',
+                                label: 'Open in a new tab',
+                                defaultValue: true,
+                                attributes: {
+                                    target: '_blank',
+                                    rel: 'noopener noreferrer'
+                                }
+                            }
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+                
+            // Image preview functionality
+            document.getElementById('featureImage').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('previewImg').src = e.target.result;
+                        document.getElementById('imagePreview').style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+</form>
+    <script>
+    document.getElementById('articleForm').addEventListener('submit', function(event){
+        event.preventDefault();
+        
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+        const category = document.getElementById('category').value;
+        const journalist = document.getElementById('journalist').value;
+        
+        // Get the image file if selected
+        const fileInput = document.getElementById('featureImage');
+        let imageUrl = '';
+        if (fileInput.files.length > 0) {
+            // In a real implementation, you'd upload the file to a server
+            // For now, we'll use a placeholder or the data URL
+            imageUrl = document.getElementById('previewImg').src || '#';
+        }
+        
+        const formData = {
+            title: title,
+            content: content,
+            category: category,
+            author: 1, // Default to user ID 1 for now
+            image: imageUrl,
+            journalist: journalist
+        };
+
+        fetch("{% url 'CRU:NewArticle' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken(),
+            },
+            body: JSON.stringify({
+                data: formData
+            })
+        })
+        .then(res => {
+            if (res.ok) {
+                alert('Article saved successfully');
+                window.location.href = "{% url 'CRU:DashboardPending' %}";
+            }
+            else {
+                alert('Error saving article');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while saving the article');
+        });
+    });
+
+    function getCSRFToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+</script>
+{% endblock %}

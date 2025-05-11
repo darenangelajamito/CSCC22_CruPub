@@ -1,0 +1,33 @@
+{% extends 'base_eb.html' %}
+
+{% block title %}
+<title>Edit Profile</title>
+{% endblock title %}
+
+{% block content %}
+<main class="profile-container">
+  <h1>My Profile</h1>
+  <form class="profile-form" method="post" action="">
+    {% csrf_token %}
+    
+    <label for="first_name">First Name</label>
+    <input type="text" id="first_name" name="first_name" value="John">
+
+    <label for="last_name">Last Name</label>
+    <input type="text" id="last_name" name="last_name" value="Doe">
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" value="johndoe123@gmail.com">
+
+    <label for="new_password">Change Password</label>
+    <input type="password" id="new_password" name="new_password" placeholder="********">
+
+    <label for="confirm_password">Confirm New Password</label>
+    <input type="password" id="confirm_password" name="confirm_password" placeholder="********">
+
+    <button type="submit">Save Changes</button>
+  </form>
+</main>
+{% endblock %}
+
+

@@ -1,0 +1,82 @@
+{% extends 'base_eb.html' %}
+
+{% block title %}
+<title>Manage Users</title>
+{% endblock title %}
+
+{% block content %}
+  <main class="main-content">
+    <h2>User List</h2>
+    <div class="filters">
+      <select>
+        <option>Sort by A-Z</option>
+        <option>Sort by Z-A</option>
+      </select>
+      <select>
+        <option>Editorial Board</option>
+        <option>Copyreader</option>
+        <option>General Staff</option>
+      </select>
+      <button class="add-user-btn">Add User</button>
+    </div>
+
+    <!-- User Table -->
+    <div class="user-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>User ID</th>
+            <th>Role</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>John Doe</td>
+            <td>johndoe@gmail.com</td>
+            <td>10001</td>
+            <td><span class="badge copyreader">Copyreader</span></td>
+            <td><i class="fas fa-trash delete-icon"></i></td>
+          </tr>
+          <tr>
+            <td>Taylor Swift</td>
+            <td>taylorswift@gmail.com</td>
+            <td>10002</td>
+            <td><span class="badge editorial">Editorial Board</span></td>
+            <td><i class="fas fa-trash delete-icon"></i></td>
+          </tr>
+          <tr>
+            <td>Olivia Rodrigo</td>
+            <td>oliviarodrigo@gmail.com</td>
+            <td>10003</td>
+            <td><span class="badge staff">General Staff</span></td>
+            <td><i class="fas fa-trash delete-icon"></i></td>
+          </tr>
+          <tr>
+            <td>Sakura Miyawaki</td>
+            <td>miyawakisakura@gmail.com</td>
+            <td>10004</td>
+            <td><span class="badge staff">General Staff</span></td>
+            <td><i class="fas fa-trash delete-icon"></i></td>
+          </tr>
+          <tr>
+            <td>Chaewon Kim</td>
+            <td>kimchaewon@gmail.com</td>
+            <td>10005</td>
+            <td><span class="badge staff">General Staff</span></td>
+            <td><i class="fas fa-trash delete-icon"></i></td>
+          </tr>
+          <tr>
+            <td>Mingyu Kim</td>
+            <td>mingyu@gmail.com</td>
+            <td>10006</td>
+            <td><span class="badge copyreader">Copyreader</span></td>
+            <td><i class="fas fa-trash delete-icon"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+{% endblock%}

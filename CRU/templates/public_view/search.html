@@ -1,0 +1,28 @@
+{% extends 'base_public.html' %}
+
+{% block title %}
+<title>Home</title>
+{% endblock title %}
+
+{% block content %}
+  <main class="user-home">
+    <section class="search-section">
+        <h2>SEARCH</h2>
+      
+        <div class="search-bar">
+          <img src="../static/menu-icon.png" alt="Menu" class="icon left-icon">
+          <input type="text" placeholder="Search...">
+          <img src="../static/search-icon.png" alt="Search" class="icon right-icon">
+        </div>
+      
+        <h3 class="categories-label">CATEGORIES</h3>
+        <div class="categories">
+          <a href="#">NEWS</a>
+          <a href="#">EDITORIAL</a>
+          <a href="#">OPINION</a>
+          <a href="#">IN PHOTOS</a>
+          <a href="#">SATIRE</a>
+        </div>
+      </section>      
+  </main>
+{% endblock %}

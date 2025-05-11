@@ -1,0 +1,37 @@
+{% extends 'base_eb.html' %}
+
+{% block title %}
+<title>Activity Logs</title>
+{% endblock title %}
+
+{% block content %}
+<main class="logs-section">
+  <div class="logs-container">
+    <h1>User Logs</h1>
+    <div class="logs-table-wrapper">
+      <table class="logs-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Action</th>
+            <th>Date & Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>John Doe</td>
+            <td>Edited Profile</td>
+            <td>April 29, 2025 – 10:24 AM</td>
+          </tr>
+          <tr>
+            <td>Jane Smith</td>
+            <td>Posted Article</td>
+            <td>April 28, 2025 – 5:16 PM</td>
+          </tr>
+          <!-- More logs -->
+        </tbody>
+      </table>
+    </div>
+  </div> 
+</main>
+{% endblock%}

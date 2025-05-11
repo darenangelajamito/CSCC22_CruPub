@@ -1,0 +1,36 @@
+{% extends 'base_eb.html' %}
+{% block title %}
+<title>Posted Dashboard</title>
+{% endblock title %}
+{% block content %}
+<main class="posted-section">
+    <div class="posted-header">
+      <h2>Posted Articles</h2>
+    </div>
+
+    <div class="article-grid">
+      <!-- Article 1 -->
+      <div class="article-card">
+        <div class="image-placeholder"></div>
+        <div class="article-info">
+          <span class="category-universitynews">UNIVERSITY NEWS</span>
+          <h3 class="title">How Xavier Days Changed Over the Years</h3>
+          <p class="author">BY JANE DOE</p>
+          <p class="approval approved-posted">✓ POSTED</p>
+        </div>
+      </div>
+
+      <!-- Article 2 -->
+      <div class="article-card">
+        <div class="image-placeholder"></div>
+        <div class="article-info">
+          <span class="category-universitynews">UNIVERSITY NEWS</span>
+          <h3 class="title">Lorem Ipsum Dolor Sit Amet</h3>
+          <p class="author">BY AUTHOR NAME</p>
+          <p class="approval approved-posted">✓ POSTED</p>
+        </div>
+      </div>
+    </div>
+    </div>
+  </main>
+{% endblock %}
