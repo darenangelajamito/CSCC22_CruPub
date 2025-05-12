@@ -18,46 +18,25 @@
     </div>
 
   <div class="article-grid">
-
+    {% for article in articles %}
     <div class="article-card">
       <div class="image-placeholder"></div>
       <div class="article-info">
-        <span class="category-universitynews">UNIVERSITY NEWS</span>
-        <h3 class="title">Lorem Ipsum Dolor Sit Amet</h3>
-        <p class="author">BY AUTHOR NAME</p>
-        <p class="approval approved-all">✓ APPROVED BY EDITORIAL BOARD AND COPYREADER</p>
+        <span class="category-universitynews">{{ article.category }}</span>
+        <h3 class="title">{{ article.title }}</h3>
+        <p class="author">BY {{ article.author.first_name }} {{ article.author.last_name }}</p>
+        {% if article.CopyReader_Status and article.Editorial_Status %}
+        <p class="approval approved-all">&#x2713; APPROVED BY EDITORIAL BOARD AND COPYREADER</p>
+        {% elif article.Editorial_Status %}
+        <p class="approval approved-editor">&#x2713; APPROVED BY EDITORIAL BOARD ONLY</p>
+        {% elif article.CopyReader_Status %}
+        <p class="approval approved-copyreader">&#x2713; APPROVED BY COPYREADER ONLY</p>
+        {% else %}
+        <p class="approval approved-none">PENDING APPROVAL</p>
+        {% endif %}
       </div>
     </div>
-
-    <div class="article-card">
-      <div class="image-placeholder"></div>
-      <div class="article-info">
-        <span class="category-universitynews">UNIVERSITY NEWS</span>
-        <h3 class="title">Lorem Ipsum Dolor Sit Amet</h3>
-        <p class="author">BY AUTHOR NAME</p>
-        <p class="approval approved-all">✓ APPROVED BY EDITORIAL BOARD AND COPYREADER</p>
-      </div>
-    </div>
-
-    <div class="article-card">
-      <div class="image-placeholder"></div>
-      <div class="article-info">
-        <span class="category-universitynews">UNIVERSITY NEWS</span>
-        <h3 class="title">Lorem Ipsum Dolor Sit Amet</h3>
-        <p class="author">BY AUTHOR NAME</p>
-        <p class="approval approved-all">✓ APPROVED BY EDITORIAL BOARD AND COPYREADER</p>
-      </div>
-    </div>
-
-    <div class="article-card">
-      <div class="image-placeholder"></div>
-      <div class="article-info">
-        <span class="category-universitynews">UNIVERSITY NEWS</span>
-        <h3 class="title">Student Festivities and Activities</h3>
-        <p class="author">BY JANE DOE</p>
-        <p class="approval approved-editor">✓ APPROVED BY EDITORIAL BOARD ONLY</p>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 </main>
 {% endblock %}

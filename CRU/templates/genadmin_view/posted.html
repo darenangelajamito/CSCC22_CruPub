@@ -10,28 +10,18 @@
     </div>
 
     <div class="article-grid">
-      <!-- Article 1 -->
+      {% for article in articles %}
       <div class="article-card">
         <div class="image-placeholder"></div>
         <div class="article-info">
-          <span class="category-universitynews">UNIVERSITY NEWS</span>
-          <h3 class="title">How Xavier Days Changed Over the Years</h3>
-          <p class="author">BY JANE DOE</p>
+          <span class="category-universitynews">{{ article.category }}</span>
+          <h3 class="title">{{ article.title }}</h3>
+          <p class="author">BY {{ article.author.first_name }} {{ article.author.last_name }}</p>
           <p class="approval approved-posted">✓ POSTED</p>
         </div>
       </div>
-
-      <!-- Article 2 -->
-      <div class="article-card">
-        <div class="image-placeholder"></div>
-        <div class="article-info">
-          <span class="category-universitynews">UNIVERSITY NEWS</span>
-          <h3 class="title">Lorem Ipsum Dolor Sit Amet</h3>
-          <p class="author">BY AUTHOR NAME</p>
-          <p class="approval approved-posted">✓ POSTED</p>
-        </div>
-      </div>
+      {% endfor %}
     </div>
-    </div>
-  </main>
+  </div>
+</main>
 {% endblock %}
