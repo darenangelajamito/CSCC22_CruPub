@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% block title %}{% endblock title %}
   <link rel="stylesheet" href="{% static 'styles.css'%}">
-  <!-- Poppins font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -48,8 +46,6 @@
     <div class="navbar-logo">
       <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="w-[150px] md:w-[200px] pl-0 md:pl-[70px]">
     </div>
-
-    <!-- Wrap links and icon in a right-side container -->
     <div class="hidden md:flex items-center gap-6 lg:gap-10">
       <ul class="flex flex-wrap gap-4 lg:gap-[50px] p-5">
         <li><a href="{% url 'CRU:DashboardPending' %}" class="relative text-white font-medium hover:text-white {% if request.resolver_match.url_name == 'DashboardPending' %}active-nav-link{% endif %}">Pending</a></li>
@@ -58,16 +54,13 @@
         <li><a href="{% url 'CRU:Logs' %}" class="relative text-white font-medium hover:text-white {% if request.resolver_match.url_name == 'Logs' %}active-nav-link{% endif %}">Logs</a></li>
         <li><a href="{% url 'CRU:Login' %}" class="relative text-white font-medium hover:text-white">Logout</a></li>
       </ul>
-
       <a href="{% url 'CRU:EditProfile' %}" class="flex items-center">
         <img src="{% static 'user-icon.png' %}" alt="User Profile" class="w-12 h-12 rounded-full cursor-pointer">
       </a>
     </div>
 
-    <!-- Mobile menu button -->
+
     <div id="bar" class="md:hidden text-white text-2xl cursor-pointer">&#9776;</div>
-    
-    <!-- Mobile menu (hidden by default) -->
     <div id="mobile-menu" class="hidden absolute top-[100px] left-0 w-full bg-primary z-50 shadow-md">
       <ul class="flex flex-col w-full">
         <li class="border-b border-blue-700"><a href="{% url 'CRU:DashboardPending' %}" class="block py-3 px-4 text-white {% if request.resolver_match.url_name == 'DashboardPending' %}font-bold{% endif %}">Pending</a></li>
@@ -85,12 +78,9 @@
 {% endblock %}
 <footer class="bg-primary text-white py-6 px-4">
   <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-8 md:gap-16">
-    <!-- Main info column -->
     <div class="w-full max-w-xs md:max-w-sm">
       <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="w-32 mb-2">
-      <p class="text-light text-xs mb-2">
-        The official student publication of Xavier University – Ateneo de Cagayan
-      </p>
+      <p class="text-light text-xs mb-2">The official student publication of Xavier University – Ateneo de Cagayan</p>
       <div class="text-xs space-y-1">
         <p><strong>Contact</strong></p>
         <p><strong>Address:</strong> STC 302, Xavier University - Ateneo de Cagayan, Cagayan de Oro</p>
@@ -104,8 +94,6 @@
         <a href="https://www.tiktok.com/@thecrusaderpub" class="transition-transform hover:scale-110"><img src="{% static 'tiktok-icon.png' %}" alt="TikTok" class="w-3.5 h-3.5 object-contain" /></a>
       </div>
     </div>
-
-    <!-- About column -->
     <div class="mt-6 md:mt-0 px-4 md:px-0">
       <h4 class="text-sm font-semibold mb-2">About</h4>
       <div class="space-y-1">
@@ -113,8 +101,6 @@
         <a href="#" class="block text-light text-xs hover:text-white hover:underline">Contact Us</a>
       </div>
     </div>
-
-    <!-- Magazines column -->
     <div class="mt-6 md:mt-0 px-4 md:px-0">
       <h4 class="text-sm font-semibold mb-2">Magazines</h4>
       <div class="space-y-1">
@@ -129,12 +115,10 @@
     <p>Designed and developed by JDR Tech Devs 2024–2025</p>
   </div>
 </footer>
-<!-- Mobile menu toggle script -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const menuButton = document.getElementById('bar');
     const mobileMenu = document.getElementById('mobile-menu');
-    
     if (menuButton && mobileMenu) {
       menuButton.addEventListener('click', function() {
         mobileMenu.classList.toggle('hidden');
