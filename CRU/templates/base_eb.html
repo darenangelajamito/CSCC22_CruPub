@@ -52,7 +52,7 @@
         <li><a href="{% url 'CRU:DashboardPosted' %}" class="relative text-white font-medium hover:text-white {% if request.resolver_match.url_name == 'DashboardPosted' %}active-nav-link{% endif %}">Posted</a></li>
         <li><a href="{% url 'CRU:UserManagement' %}" class="relative text-white font-medium hover:text-white {% if request.resolver_match.url_name == 'UserManagement' %}active-nav-link{% endif %}">Users</a></li>
         <li><a href="{% url 'CRU:Logs' %}" class="relative text-white font-medium hover:text-white {% if request.resolver_match.url_name == 'Logs' %}active-nav-link{% endif %}">Logs</a></li>
-        <li><a href="{% url 'CRU:Login' %}" class="relative text-white font-medium hover:text-white">Logout</a></li>
+        <li><a href="{% url 'CRU:Logout' %}" class="relative text-white font-medium hover:text-white">Logout</a></li>
       </ul>
       <a href="{% url 'CRU:EditProfile' %}" class="flex items-center">
         <img src="{% static 'user-icon.png' %}" alt="User Profile" class="w-12 h-12 rounded-full cursor-pointer">
@@ -68,7 +68,7 @@
         <li class="border-b border-blue-700"><a href="{% url 'CRU:UserManagement' %}" class="block py-3 px-4 text-white {% if request.resolver_match.url_name == 'UserManagement' %}font-bold{% endif %}">Users</a></li>
         <li class="border-b border-blue-700"><a href="{% url 'CRU:Logs' %}" class="block py-3 px-4 text-white {% if request.resolver_match.url_name == 'Logs' %}font-bold{% endif %}">Logs</a></li>
         <li class="border-b border-blue-700"><a href="{% url 'CRU:EditProfile' %}" class="block py-3 px-4 text-white">Profile</a></li>
-        <li><a href="{% url 'CRU:Login' %}" class="block py-3 px-4 text-white">Logout</a></li>
+        <li><a href="{% url 'CRU:Logout' %}" class="block py-3 px-4 text-white">Logout</a></li>
       </ul>
     </div>
   </nav>
@@ -111,7 +111,7 @@
   </div>
 
   <div class="text-center mt-5 pt-3 text-xs text-light max-w-6xl mx-auto">
-    <p class="mb-0.5">© 2025 The Crusader Publication All Rights Reserved</p>
+    <p class="mb-0.5"> 2025 The Crusader Publication All Rights Reserved</p>
     <p>Designed and developed by JDR Tech Devs 2024–2025</p>
   </div>
 </footer>

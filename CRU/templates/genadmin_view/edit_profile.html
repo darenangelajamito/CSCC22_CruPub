@@ -1,4 +1,4 @@
-{% extends 'base_eb.html' %}
+{% extends base_template|default:'base_eb.html' %}
 
 {% block title %}
 <title>Edit Profile</title>
@@ -65,5 +65,3 @@
   </div>
 </main>
 {% endblock %}
-
-

@@ -344,56 +344,48 @@ cursor: pointer;
   padding: 15px 20px;
 }
 
-.category-universitynews{
-  font-size: 10px;
-  font-weight: 600px;
-  color: #fff;
-  background-color: #0A2566;
-  padding: 2px 6px;
-  text-transform: uppercase;
+/* Category Styles */
+.category-universitynews {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  background-color: #0A2566 !important;
+  padding: 2px 6px !important;
+  text-transform: uppercase !important;
 }
 
-.category-opinion{
-  font-size: 10px;
-  font-weight: 600px;
-  color: #fff;
-  background-color: #8F181B;
-  padding: 2px 6px;
-  text-transform: uppercase;
+.category-opinion {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  background-color: #8F181B !important;
+  padding: 2px 6px !important;
+  text-transform: uppercase !important;
 }
 
-.category-universitynews{
-  font-size: 10px;
-  font-weight: 600px;
-  color: #fff;
-  background-color: #0A2566;
-  padding: 2px 6px;
-  text-transform: uppercase;
-}
-
-.category-inphotos{
-  font-size: 10px;
-  font-weight: 600px;
-  color: #fff;
-  background-color: #009C65;
-  padding: 2px 6px;
-  text-transform: uppercase;
+.category-inphotos {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  background-color: #009C65 !important;
+  padding: 2px 6px !important;
+  text-transform: uppercase !important;
 }
 
 .category-editorial{
   font-size: 10px;
   font-weight: 600px;
   color: #fff;
-  background-color: #009C65;
+  background-color: #D4B835;
   padding: 2px 6px;
   text-transform: uppercase;
 }
 
-.category-inphotos{
+.category-satire{
   font-size: 10px;
   font-weight: 600px;
   color: #fff;
-  background-color: #009C65;
+  background-color: #F88ED3;
   padding: 2px 6px;
   text-transform: uppercase;
 }

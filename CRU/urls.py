@@ -6,6 +6,7 @@ app_name = 'CRU'
 urlpatterns = [
     path('', views.home, name='Home'),
     path('login/', views.login, name='Login'),
+    path('logout/', views.logout, name='Logout'),
     path('pending/', views.pending_view, name="DashboardPending"),
     path('posted/', views.posted_view, name="DashboardPosted"),
     path('create-article/', views.create_view, name="NewArticle"),

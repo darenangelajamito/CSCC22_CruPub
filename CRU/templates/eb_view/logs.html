@@ -1,4 +1,4 @@
-{% extends 'base_eb.html' %}
+{% extends base_template|default:'base_eb.html' %}
 
 {% block title %}
 <title>Activity Logs</title>
@@ -102,4 +102,4 @@
     </div>
   </div>
 </main>
-{% endblock%}
+{% endblock %}
