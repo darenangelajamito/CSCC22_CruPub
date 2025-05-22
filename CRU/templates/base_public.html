@@ -3,6 +3,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="{% static 'favicon.png' %}" type="image/png">
   {% block title %}{% endblock title %}
   <link rel="stylesheet" href="{% static 'styles.css'%}">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,16 +26,18 @@
       },
     }
   </script>
+
 </head>
 <body>
 <header>
   <nav id="user-navbar" class="user-navbar">
     <div class="user-navbar-logo">
-      <img src="{% static 'TheCrusaderBlue.png' %}" alt="The Crusader Logo">
+      <a href="{% url 'CRU:Home' %}">
+        <img src="{% static 'TheCrusaderBlue.png' %}" alt="The Crusader Logo" class="w-[180px] md:w-[250px]">
+      </a>
     </div>
     <ul class="user-navbar-links">
       <li><a href="{% url 'CRU:Home' %}" class="{% if request.resolver_match.url_name == 'Home' %}active{% endif %}">Home</a></li>
-      <li><a href="{% url 'CRU:About' %}" class="{% if request.resolver_match.url_name == 'About' %}active{% endif %}">About</a></li>
       <li><a href="#contact" class="{% if request.resolver_match.url_name == 'Contact' %}active{% endif %}">Contact</a></li>
       <li><a href="{% url 'CRU:Search' %}" class="{% if request.resolver_match.url_name == 'Search' %}active{% endif %}">Search</a></li>
     </ul>
@@ -43,10 +47,10 @@
 
 {% block content %}
 {% endblock %}
-<footer id="contact" style="background-color: #27305c;" class="text-white py-6 px-4">
+<footer id="contact" class="footer-bg text-white py-6 px-4">
   <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-8 md:gap-16">
     <div class="w-full max-w-xs md:max-w-sm">
-      <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="w-32 mb-2">
+      <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="w-40 mb-2">
       <p class="text-light text-xs mb-2">The official student publication of Xavier University – Ateneo de Cagayan</p>
       <div class="text-xs space-y-1">
         <p><strong>Contact</strong></p>

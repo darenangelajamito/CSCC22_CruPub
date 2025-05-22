@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: "crupub_db"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - crupub_network
+
+  web:
+    build: .
+    container_name: "crupub_web"
+    env_file:
+      - .env
+    restart: unless-stopped
+    command: dev
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=dev_secret_key_change_in_production
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - IN_DOCKER=True
+      - DB_HOST=db
+      - DB_PORT=3306
+      - MYSQL_DATABASE=crupub
+      - MYSQL_USER=crupub_user
+      - MYSQL_PASSWORD=crupub_password
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - crupub_network
+
+volumes:
+  mysql_data:
+    name: crupub_mysql_data
+  static_volume:
+    name: crupub_static
+  media_volume:
+    name: crupub_media
+
+networks:
+  crupub_network:
+    name: crupub_network

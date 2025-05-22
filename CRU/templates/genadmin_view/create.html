@@ -1,4 +1,4 @@
-{% extends 'base_eb.html' %}
+{% extends base_template|default:'base_eb.html' %}
 {% block title %}
 <title>Create Article</title>
 {% endblock title %}
@@ -7,7 +7,7 @@
 <main class="bg-gray-50 min-h-screen py-8 px-4 md:px-8">
   <div class="max-w-7xl mx-auto">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4 md:mb-0">Create New Article</h2>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4 md:mb-0">{% if article %}Edit{% else %}Create New{% endif %} Article</h2>
       <a href="{% url 'CRU:DashboardPending' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md shadow-sm transition duration-150 ease-in-out text-sm font-medium flex items-center">
         <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
@@ -17,25 +17,77 @@
     </div>
 
     <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
-      <form id="articleForm" method="post" class="space-y-6">
+      {% if error %}
+      <div class="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+        {{ error }}
+      </div>
+      {% endif %}
+      
+      {% if article %}
+      <div class="mb-6 border-b pb-4">
+        <div class="flex flex-wrap gap-2 mb-2">
+          <div class="flex items-center">
+            <span class="text-sm font-medium text-gray-700 mr-2">Status:</span>
+            {% if article.status %}
+              <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Published</span>
+            {% else %}
+              <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Draft</span>
+            {% endif %}
+          </div>
+          
+          <div class="flex items-center">
+            <span class="text-sm font-medium text-gray-700 mr-2">Copyreader:</span>
+            {% if article.CopyReader_Status %}
+              <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Approved</span>
+            {% else %}
+              <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">Pending</span>
+            {% endif %}
+          </div>
+          
+          <div class="flex items-center">
+            <span class="text-sm font-medium text-gray-700 mr-2">Editorial:</span>
+            {% if article.Editorial_Status %}
+              <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Approved</span>
+            {% else %}
+              <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">Pending</span>
+            {% endif %}
+          </div>
+        </div>
+        
+        {% if article.created_at %}
+        <div class="text-xs text-gray-500">
+          Created: {{ article.created_at|date:"F j, Y, g:i a" }}
+          {% if article.updated_at %} | Last updated: {{ article.updated_at|date:"F j, Y, g:i a" }}{% endif %}
+          {% if article.published_at %} | Published: {{ article.published_at|date:"F j, Y, g:i a" }}{% endif %}
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+      
+      <form id="articleForm" method="post" enctype="multipart/form-data" class="space-y-6">
         {% csrf_token %}
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="space-y-2">
             <label for="title" class="block text-sm font-medium text-gray-700">Article Title</label>
-            <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" required>
+            <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" required {% if form_data %}value="{{ form_data.title }}"{% elif article %}value="{{ article.title }}"{% endif %}>
           </div>
 
+          <div class="space-y-2">
+            <label for="author_name" class="block text-sm font-medium text-gray-700">Author Name</label>
+            <input type="text" id="author_name" name="author_name" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" {% if form_data %}value="{{ form_data.author_name }}"{% elif article %}value="{{ article.author_name }}"{% endif %}>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="space-y-2">
             <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
             <div class="relative">
               <select id="category" name="category" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary appearance-none pr-10" required>
-                <option value="" disabled selected>Select a category</option>
-                <option value="1" data-class="category-universitynews">University News</option>
-                <option value="2" data-class="category-editorial">Editorial</option>
-                <option value="3" data-class="category-opinion">Opinion</option>
-                <option value="4" data-class="category-inphotos">In Photos</option>
-                <option value="5" data-class="category-satire">Satire</option>
+                <option value="" disabled {% if not article %}selected{% endif %}>Select a category</option>
+                {% for category in categories %}
+                <option value="{{ category.category_id }}" data-class="category-{{ category.name|lower|cut:" " }}" {% if form_data and form_data.category_id == category.category_id|stringformat:"s" %}selected{% elif article and article.category.category_id == category.category_id %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
               </select>
               <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -43,115 +95,286 @@
                 </svg>
               </div>
             </div>
-            <div id="categoryBadgePreview" class="mt-2 hidden">
-              <span id="categoryBadge" class="">CATEGORY</span>
+            <div id="categoryBadgePreview" class="mt-2 {% if not article %}hidden{% endif %}">
+              <span id="categoryBadge" class="{% if article %}category-{{ article.category.name|lower|cut:" " }}{% endif %}">{% if article %}{{ article.category.name|upper }}{% else %}CATEGORY{% endif %}</span>
             </div>
           </div>
         </div>
 
         <div class="space-y-2">
           <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
-          <textarea id="content" name="content" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" rows="12"></textarea>
+          <textarea id="content" name="content" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" rows="12">{% if form_data %}{{ form_data.content }}{% elif article %}{{ article.content }}{% endif %}</textarea>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="space-y-2">
             <label for="featureImage" class="block text-sm font-medium text-gray-700">Feature Image</label>
-            <input type="file" id="featureImage" name="featureImage" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
-            <div id="imagePreview" class="mt-4 hidden">
-              <img id="previewImg" src="#" alt="Image preview" class="max-h-48 max-w-full rounded-md border border-gray-300">
+            <div class="flex flex-col space-y-2">
+              <input type="file" id="featureImage" name="featureImage" accept="image/jpeg,image/png,image/gif,image/webp" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+              <p class="text-xs text-gray-500">Recommended: 1200×800px, Max 5MB. Formats: JPG, PNG, GIF, WEBP</p>
+            </div>
+            
+            {% if article and article.feature_images.first %}
+            <div id="currentImage" class="mt-4 border rounded-md p-2 bg-gray-50 relative">
+              <p class="text-xs font-medium text-gray-700 mb-1">Current image:</p>
+              <img src="{% if article.feature_images.first.image %}{{ article.feature_images.first.image.url }}{% elif article.feature_images.first.image_url %}{{ article.feature_images.first.image_url }}{% endif %}" 
+                   alt="Current feature image" 
+                   class="max-h-48 max-w-full rounded-md border border-gray-300 object-cover">
+              
+              <!-- X Button for image removal -->
+              <button type="button" id="removeImageBtn" class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm hover:bg-gray-100 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              
+              <!-- Hidden input to track removal state -->
+              <input type="hidden" id="removeImage" name="removeImage" value="false">
+            </div>
+            {% endif %}
+            
+            <div id="imagePreview" class="mt-4 {% if not article or not article.feature_images.first %}hidden{% endif %}">
+              <p class="text-xs font-medium text-gray-700 mb-1">New image preview:</p>
+              <img id="previewImg" src="#" alt="New image preview" class="max-h-48 max-w-full rounded-md border border-gray-300 object-cover">
             </div>
           </div>
 
           <div class="space-y-2">
             <label for="journalist" class="block text-sm font-medium text-gray-700">Photo Journalist</label>
-            <input type="text" id="journalist" name="journalist" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+            <input type="text" id="journalist" name="journalist" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" {% if form_data %}value="{{ form_data.journalist }}"{% elif article and article.feature_images.first %}value="{{ article.feature_images.first.photo_journalist }}"{% endif %}>
+            <p class="text-xs text-gray-500">Credit the photographer or source of the image</p>
           </div>
         </div>
 
-        <div class="flex justify-end pt-4">
-          <button type="submit" id="submitArticle" class="bg-primary hover:bg-secondary text-white py-2 px-6 rounded-md shadow-sm transition duration-150 ease-in-out font-medium">Submit Article</button>
+        {% if article %}
+        <div class="border-t border-gray-200 pt-4 mt-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-3">Approval Status</h3>
+          
+          {% if is_copyreader %}
+          <div class="mb-4">
+            <label class="inline-flex items-center">
+              <input type="checkbox" name="CopyReader_Status" {% if article.CopyReader_Status %}checked{% endif %} class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+              <span class="ml-2 text-sm text-gray-700">Approve as Copyreader</span>
+            </label>
+          </div>
+          {% endif %}
+          
+          {% if is_editorialboard %}
+          <div class="mb-4">
+            <label class="inline-flex items-center">
+              <input type="checkbox" name="Editorial_Status" {% if article.Editorial_Status %}checked{% endif %} class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+              <span class="ml-2 text-sm text-gray-700">Approve as Editorial Board</span>
+            </label>
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="flex flex-wrap justify-between pt-4 gap-3">
+          <div class="flex space-x-3">
+            {% if article %}
+              <a href="{% url 'CRU:DeleteArticle' article.article_id %}" onclick="return confirm('Are you sure you want to delete this article? This action cannot be undone.')" class="bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded-md shadow-sm transition duration-150 ease-in-out font-medium">Delete Article</a>
+            {% endif %}
+          </div>
+          
+          <div class="flex space-x-3">
+            {% if article %}
+              {% if is_editorialboard and not article.status and article.CopyReader_Status %}
+              <button type="submit" name="action" value="publishDraft" class="bg-primary hover:bg-secondary text-white py-2 px-6 rounded-md shadow-sm transition duration-150 ease-in-out font-medium">Publish Article</button>
+              {% endif %}
+              <button type="submit" name="action" value="submitDraft" class="bg-primary hover:bg-secondary text-white py-2 px-6 rounded-md shadow-sm transition duration-150 ease-in-out font-medium">Save Changes</button>
+            {% else %}
+              <button type="submit" name="action" value="submitDraft" class="bg-primary hover:bg-secondary text-white py-2 px-6 rounded-md shadow-sm transition duration-150 ease-in-out font-medium">Submit Article</button>
+            {% endif %}
+          </div>
         </div>
       </form>
     </div>
   </div>
 </main>
 
-<style>
-  .category-universitynews {
-    font-size: 10px;
-    font-weight: 600;
-    color: #fff;
-    background-color: #0A2566;
-    padding: 2px 6px;
-    text-transform: uppercase;
-  }
-  
-  .category-editorial {
-    font-size: 10px;
-    font-weight: 600;
-    color: #fff;
-    background-color: #D4B835;
-    padding: 2px 6px;
-    text-transform: uppercase;
-  }
-  
-  .category-opinion {
-    font-size: 10px;
-    font-weight: 600;
-    color: #fff;
-    background-color: #8F181B;
-    padding: 2px 6px;
-    text-transform: uppercase;
-  }
-  
-  .category-inphotos {
-    font-size: 10px;
-    font-weight: 600;
-    color: #fff;
-    background-color: #009C65;
-    padding: 2px 6px;
-    text-transform: uppercase;
-  }
-  
-  .category-satire {
-    font-size: 10px;
-    font-weight: 600;
-    color: #fff;
-    background-color: #F88ED3;
-    padding: 2px 6px;
-    text-transform: uppercase;
-  }
-</style>
-
-<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/decoupled-document/ckeditor.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    ClassicEditor
-      .create(document.querySelector('#content'), {
-        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote', 'insertTable', 'undo', 'redo'],
-        link: {
-          addTargetToExternalLinks: true,
-          defaultProtocol: 'https://'
+    let editor;
+    
+    const contentElement = document.querySelector('#content');
+    const editorContainer = document.createElement('div');
+    editorContainer.className = 'editor-container';
+    contentElement.parentNode.insertBefore(editorContainer, contentElement);
+    
+    const toolbarContainer = document.createElement('div');
+    toolbarContainer.className = 'toolbar-container border border-gray-300 rounded-t-md p-1 bg-gray-50';
+    editorContainer.appendChild(toolbarContainer);
+    
+    const editorContent = document.createElement('div');
+    editorContent.className = 'editor-content border border-gray-300 border-t-0 rounded-b-md p-3 min-h-[300px]';
+    editorContainer.appendChild(editorContent);
+    
+    const style = document.createElement('style');
+    style.textContent = `
+      .editor-container {
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border-radius: 0.375rem;
+        overflow: hidden;
+      }
+      .toolbar-container {
+        border-bottom: none;
+        background-color: #f8fafc;
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-bottom: none;
+        border-top-left-radius: 0.375rem;
+        border-top-right-radius: 0.375rem;
+      }
+      .editor-content {
+        min-height: 350px;
+        padding: 1rem;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-top: none;
+        border-bottom-left-radius: 0.375rem;
+        border-bottom-right-radius: 0.375rem;
+      }
+      .ck-toolbar {
+        border: none !important;
+        background: transparent !important;
+      }
+      .ck-content h1 {
+        font-size: 1.875rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #1e293b;
+      }
+      .ck-content h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: #1e293b;
+      }
+      .ck-content h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #1e293b;
+      }
+      .ck-content p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+      .ck-content ul, .ck-content ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+      }
+      .ck-content ul li {
+        list-style-type: disc;
+        margin-bottom: 0.375rem;
+      }
+      .ck-content ol li {
+        list-style-type: decimal;
+        margin-bottom: 0.375rem;
+      }
+      .ck-focused {
+        box-shadow: none !important;
+        border-color: #3b82f6 !important;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    DecoupledEditor
+      .create(editorContent, {
+        toolbar: [
+          'heading', '|',
+          'bold', 'italic', 'underline', 'strikethrough', '|',
+          'alignment', '|',
+          'numberedList', 'bulletedList', '|',
+          'outdent', 'indent', '|',
+          'link', 'blockquote', 'insertTable', '|',
+          'undo', 'redo'
+        ],
+        heading: {
+          options: [
+            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+            { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
+          ]
         }
+      })
+      .then(newEditor => {
+        editor = newEditor;
+        
+        // Set initial content from the textarea
+        if (contentElement.value) {
+          editor.setData(contentElement.value);
+        }
+        
+        // Hide the original textarea
+        contentElement.style.display = 'none';
+        
+        // Attach the toolbar to the container
+        toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+        
+        // Update the hidden textarea on form submit
+        document.getElementById('articleForm').addEventListener('submit', function() {
+          contentElement.value = editor.getData();
+        });
       })
       .catch(error => {
         console.error(error);
       });
       
-    document.getElementById('featureImage').addEventListener('change', function(event) {
+
+    const featureImageInput = document.getElementById('featureImage');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+    const currentImageDiv = document.getElementById('currentImage');
+    const removeImageInput = document.getElementById('removeImage');
+    
+    featureImageInput.addEventListener('change', function(event) {
       const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('previewImg').src = e.target.result;
-          document.getElementById('imagePreview').classList.remove('hidden');
-        }
-        reader.readAsDataURL(file);
+      
+
+      if (!file) {
+        imagePreview.classList.add('hidden');
+        return;
       }
+      
+
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (!validTypes.includes(file.type)) {
+        alert('Please select a valid image file (JPG, PNG, GIF, or WEBP)');
+        featureImageInput.value = '';
+        imagePreview.classList.add('hidden');
+        return;
+      }
+      
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image file size must be less than 5MB');
+        featureImageInput.value = '';
+        imagePreview.classList.add('hidden');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        imagePreview.classList.remove('hidden');
+      }
+      reader.readAsDataURL(file);
     });
     
-    // Category badge preview
+    if (removeImageBtn && currentImageDiv) {
+      removeImageBtn.addEventListener('click', function() {
+        currentImageDiv.classList.add('hidden');
+        removeImageInput.value = 'true';
+        featureImageInput.value = ''; 
+        imagePreview.classList.add('hidden');
+      });
+    }
+    
     const categorySelect = document.getElementById('category');
     const categoryBadge = document.getElementById('categoryBadge');
     const categoryBadgePreview = document.getElementById('categoryBadgePreview');
@@ -168,50 +391,6 @@
       } else {
         categoryBadgePreview.classList.add('hidden');
       }
-    });
-
-    document.getElementById('articleForm').addEventListener('submit', function(event){
-      event.preventDefault();
-      
-      const title = document.getElementById('title').value;
-      const content = document.getElementById('content').value;
-      const category = document.getElementById('category').value;
-      const journalist = document.getElementById('journalist').value;
-      
-      const fileInput = document.getElementById('featureImage');
-      let imageUrl = '';
-      if (fileInput.files.length > 0) {
-        imageUrl = document.getElementById('previewImg').src || '#';
-      }
-      
-      const formData = {
-        title: title,
-        content: content,
-        category: category,
-        author: 1,
-        image: imageUrl,
-        journalist: journalist
-      };
-
-      fetch("{% url 'CRU:NewArticle' %}", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
-        },
-        body: JSON.stringify(formData)
-      })
-      .then(res => {
-        if (res.ok) {
-          window.location.href = "{% url 'CRU:DashboardPending' %}";
-        } else {
-          alert('Error saving article');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while saving the article');
-      });
     });
   });
 </script>

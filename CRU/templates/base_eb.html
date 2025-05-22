@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="{% static 'favicon.png' %}" type="image/png">
   {% block title %}{% endblock title %}
   <link rel="stylesheet" href="{% static 'styles.css'%}">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,26 +26,15 @@
       },
     }
   </script>
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .active-nav-link::after {
-        content: "";
-        width: 50%;
-        height: 5px;
-        border-radius: 5px;
-        background-color: #fff;
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-      }
-    }
-  </style>
+  <!-- CSS moved to styles.css -->
 </head>
 <body class="font-poppins">
 <header class="w-full">
   <nav id="navbar" class="bg-primary flex justify-between items-center px-4 md:px-8 shadow-md h-[100px] relative">
     <div class="navbar-logo">
-      <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="w-[150px] md:w-[200px] pl-0 md:pl-[70px]">
+      <a href="{% url 'CRU:DashboardPending' %}">
+        <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="w-[180px] md:w-[250px] pl-0 md:pl-[70px]">
+      </a>
     </div>
     <div class="hidden md:flex items-center gap-6 lg:gap-10">
       <ul class="flex flex-wrap gap-4 lg:gap-[50px] p-5">
@@ -52,11 +42,18 @@
         <li><a href="{% url 'CRU:DashboardPosted' %}" class="relative text-white font-medium hover:text-white {% if request.resolver_match.url_name == 'DashboardPosted' %}active-nav-link{% endif %}">Posted</a></li>
         <li><a href="{% url 'CRU:UserManagement' %}" class="relative text-white font-medium hover:text-white {% if request.resolver_match.url_name == 'UserManagement' %}active-nav-link{% endif %}">Users</a></li>
         <li><a href="{% url 'CRU:Logs' %}" class="relative text-white font-medium hover:text-white {% if request.resolver_match.url_name == 'Logs' %}active-nav-link{% endif %}">Logs</a></li>
-        <li><a href="{% url 'CRU:Login' %}" class="relative text-white font-medium hover:text-white">Logout</a></li>
       </ul>
-      <a href="{% url 'CRU:EditProfile' %}" class="flex items-center">
-        <img src="{% static 'user-icon.png' %}" alt="User Profile" class="w-12 h-12 rounded-full cursor-pointer">
-      </a>
+      <div class="relative dropdown-container">
+        <button id="profile-dropdown-btn" class="flex items-center focus:outline-none">
+          <img src="{% static 'user-icon.png' %}" alt="User Profile" class="w-12 h-12 rounded-full cursor-pointer">
+        </button>
+        <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50">
+          <div class="py-1" role="menu" aria-orientation="vertical">
+            <a href="{% url 'CRU:EditProfile' %}" class="dropdown-item block px-4 py-2 text-sm font-medium text-gray-900 hover:text-black hover:bg-gray-100" role="menuitem">Edit Profile</a>
+            <a href="{% url 'CRU:Logout' %}" class="dropdown-item block px-4 py-2 text-sm font-medium text-gray-900 hover:text-black hover:bg-gray-100" role="menuitem">Logout</a>
+          </div>
+        </div>
+      </div>
     </div>
 
 
@@ -67,8 +64,18 @@
         <li class="border-b border-blue-700"><a href="{% url 'CRU:DashboardPosted' %}" class="block py-3 px-4 text-white {% if request.resolver_match.url_name == 'DashboardPosted' %}font-bold{% endif %}">Posted</a></li>
         <li class="border-b border-blue-700"><a href="{% url 'CRU:UserManagement' %}" class="block py-3 px-4 text-white {% if request.resolver_match.url_name == 'UserManagement' %}font-bold{% endif %}">Users</a></li>
         <li class="border-b border-blue-700"><a href="{% url 'CRU:Logs' %}" class="block py-3 px-4 text-white {% if request.resolver_match.url_name == 'Logs' %}font-bold{% endif %}">Logs</a></li>
-        <li class="border-b border-blue-700"><a href="{% url 'CRU:EditProfile' %}" class="block py-3 px-4 text-white">Profile</a></li>
-        <li><a href="{% url 'CRU:Login' %}" class="block py-3 px-4 text-white">Logout</a></li>
+        <li class="border-b border-blue-700">
+          <button id="mobile-profile-btn" class="flex items-center justify-between w-full py-3 px-4 text-white">
+            Profile
+            <svg id="mobile-profile-icon" class="w-4 h-4 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          <div id="mobile-profile-menu" class="hidden bg-blue-900">
+            <a href="{% url 'CRU:EditProfile' %}" class="mobile-dropdown-item block py-3 px-8 text-white">Edit Profile</a>
+            <a href="{% url 'CRU:Logout' %}" class="mobile-dropdown-item block py-3 px-8 text-white">Logout</a>
+          </div>
+        </li>
       </ul>
     </div>
   </nav>
@@ -111,10 +118,11 @@
   </div>
 
   <div class="text-center mt-5 pt-3 text-xs text-light max-w-6xl mx-auto">
-    <p class="mb-0.5">© 2025 The Crusader Publication All Rights Reserved</p>
+    <p class="mb-0.5"> 2025 The Crusader Publication All Rights Reserved</p>
     <p>Designed and developed by JDR Tech Devs 2024–2025</p>
   </div>
 </footer>
+<!-- CSS moved to styles.css -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const menuButton = document.getElementById('bar');
@@ -124,6 +132,64 @@
         mobileMenu.classList.toggle('hidden');
       });
     }
+    
+    
+    const mobileManagementBtn = document.getElementById('mobile-management-btn');
+    const mobileManagementMenu = document.getElementById('mobile-management-menu');
+    const mobileManagementIcon = document.getElementById('mobile-management-icon');
+    if (mobileManagementBtn && mobileManagementMenu) {
+      mobileManagementBtn.addEventListener('click', function() {
+        mobileManagementMenu.classList.toggle('hidden');
+        mobileManagementIcon.classList.toggle('rotate-180');
+      });
+    }
+    
+    
+    const mobileProfileBtn = document.getElementById('mobile-profile-btn');
+    const mobileProfileMenu = document.getElementById('mobile-profile-menu');
+    const mobileProfileIcon = document.getElementById('mobile-profile-icon');
+    if (mobileProfileBtn && mobileProfileMenu) {
+      mobileProfileBtn.addEventListener('click', function() {
+        mobileProfileMenu.classList.toggle('hidden');
+        mobileProfileIcon.classList.toggle('rotate-180');
+      });
+    }
+    
+    
+    function setupDropdown(buttonId, dropdownId) {
+      const button = document.getElementById(buttonId);
+      const dropdown = document.getElementById(dropdownId);
+      
+      if (button && dropdown) {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const allDropdowns = document.querySelectorAll('.absolute.z-50');
+          allDropdowns.forEach(function(item) {
+            if (item.id !== dropdownId && item.classList.contains('dropdown-active')) {
+              item.classList.remove('dropdown-active');
+            }
+          });
+          
+          dropdown.classList.toggle('dropdown-active');
+        });
+        
+        document.addEventListener('click', function(e) {
+          if (!dropdown.contains(e.target) && !button.contains(e.target)) {
+            dropdown.classList.remove('dropdown-active');
+          }
+        });
+        
+        dropdown.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+    }
+    
+    
+    setupDropdown('management-dropdown-btn', 'management-dropdown');
+    setupDropdown('profile-dropdown-btn', 'profile-dropdown');
   });
 </script>
 </body>

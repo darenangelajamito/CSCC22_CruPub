@@ -1,12 +1,12 @@
-{% extends 'base_eb.html' %}
+{% extends base_template|default:'base_eb.html' %}
 
 {% block title %}
 <title>Pending Dashboard</title>
 {% endblock title %}
 
 {% block content %}
-<main class="bg-gray-50 min-h-screen py-8 px-4 md:px-8">
-  <div class="max-w-7xl mx-auto">
+<main class="bg-gray-50 min-h-screen py-8 px-4 md:px-8 lg:px-16">
+  <div class="max-w-5xl mx-auto">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
       <h2 class="text-2xl font-semibold text-gray-800 mb-4 md:mb-0">Pending Articles</h2>
       <a href="{% url 'CRU:NewArticle' %}" class="bg-primary hover:bg-secondary text-white py-2 px-4 rounded-md shadow-sm transition duration-150 ease-in-out text-sm font-medium flex items-center">
@@ -19,24 +19,42 @@
 
   <div class="article-grid">
     {% for article in articles %}
-    <div class="article-card">
-      <div class="image-placeholder"></div>
-      <div class="article-info">
-        <span class="category-universitynews">{{ article.category }}</span>
-        <h3 class="title">{{ article.title }}</h3>
-        <p class="author">BY {{ article.author.first_name }} {{ article.author.last_name }}</p>
-        {% if article.CopyReader_Status and article.Editorial_Status %}
-        <p class="approval approved-all">&#x2713; APPROVED BY EDITORIAL BOARD AND COPYREADER</p>
-        {% elif article.Editorial_Status %}
-        <p class="approval approved-editor">&#x2713; APPROVED BY EDITORIAL BOARD ONLY</p>
-        {% elif article.CopyReader_Status %}
-        <p class="approval approved-copyreader">&#x2713; APPROVED BY COPYREADER ONLY</p>
-        {% else %}
-        <p class="approval approved-none">PENDING APPROVAL</p>
-        {% endif %}
+      {% if article.article_id %}
+      <a href="{% url 'CRU:EditArticle' article.article_id %}" class="article-card">
+        <div class="image-placeholder {% if article.feature_images.first %}{% if article.feature_images.first.image or article.feature_images.first.image_url %}bg-image{% endif %}{% endif %}" 
+          {% if article.feature_images.first %}
+            {% if article.feature_images.first.image %}
+              style="background-image: url('{{ article.feature_images.first.image.url }}');"
+            {% elif article.feature_images.first.image_url %}
+              style="background-image: url('{{ article.feature_images.first.image_url }}');"
+            {% endif %}
+          {% endif %}>
+        </div>
+        <div class="article-info">
+          <span class="{% if article.category.name|lower == 'university news' %}category-universitynews{% elif article.category.name|lower == 'in photos' %}category-inphotos{% elif article.category.name|lower == 'editorial' %}category-editorial{% elif article.category.name|lower == 'satire' %}category-satire{% elif article.category.name|lower == 'opinion' %}category-opinion{% endif %}">
+            {{ article.category.name|upper }}
+          </span>
+          <h3 class="title">{{ article.title }}</h3>
+          <p class="author">BY {{ article.author_name|upper }}</p>
+          {% if article.CopyReader_Status and article.Editorial_Status %}
+          <p class="approval approved-all">&#x2713; APPROVED BY EDITORIAL BOARD AND COPYREADER</p>
+          {% elif article.Editorial_Status %}
+          <p class="approval approved-editor">&#x2713; APPROVED BY EDITORIAL BOARD ONLY</p>
+          {% elif article.CopyReader_Status %}
+          <p class="approval approved-copyreader">&#x2713; APPROVED BY COPYREADER ONLY</p>
+          {% else %}
+          <p class="approval approved-none">PENDING APPROVAL</p>
+          {% endif %}
+        </div>
+      </a>
+      {% endif %}
+    {% empty %}
+      <div class="empty-state">
+        <p class="text-gray-500">No pending articles yet.</p>
       </div>
-    </div>
     {% endfor %}
   </div>
 </main>
+
+
 {% endblock %}
