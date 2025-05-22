@@ -1,0 +1,146 @@
+{% extends 'base_public.html' %}
+
+{% block title %}
+<title>{{ article.category.name }} | {{ article.title }}</title>
+{% endblock title %}
+
+{% block content %}
+<main class="bg-gray-50 min-h-screen">
+  <!-- Back Navigation -->
+  <div class="bg-white shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      {% if is_logged_in %}
+        <a href="{% url 'CRU:DashboardPosted' %}" class="inline-flex items-center text-gray-600 hover:text-primary transition-colors text-sm font-medium">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+          </svg>
+          Back to Posted Dashboard
+        </a>
+      {% else %}
+        <a href="{% url 'CRU:Home' %}" class="inline-flex items-center text-gray-600 hover:text-primary transition-colors text-sm font-medium">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+          </svg>
+          Back to Home
+        </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Article Header -->
+  <header class="relative">
+    {% if article.feature_images.first %}
+      {% if article.feature_images.first.image %}
+        <div class="w-full h-[28rem] bg-image" style="background-image: url('{{ article.feature_images.first.image.url }}');"></div>
+      {% elif article.feature_images.first.image_url %}
+        <div class="w-full h-[28rem] bg-image" style="background-image: url('{{ article.feature_images.first.image_url }}');"></div>
+      {% endif %}
+    {% else %}
+      <div class="w-full h-[28rem] bg-gray-200 flex items-center justify-center">
+        <span class="text-gray-500 text-lg">No feature image</span>
+      </div>
+    {% endif %}
+    
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative z-10">
+      <div class="bg-white p-6 md:p-10 shadow-xl rounded-lg">
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+          <span class="{% if article.category.name|lower == 'university news' %}category-universitynews{% elif article.category.name|lower == 'in photos' %}category-inphotos{% elif article.category.name|lower == 'editorial' %}category-editorial{% elif article.category.name|lower == 'satire' %}category-satire{% elif article.category.name|lower == 'opinion' %}category-opinion{% endif %} px-4 py-1.5 text-xs">
+            {{ article.category.name|upper }}
+          </span>
+          <time class="text-sm text-gray-500" datetime="{{ article.created_at|date:'Y-m-d' }}">{{ article.created_at|date:'F j, Y' }}</time>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">{{ article.title }}</h1>
+        <div class="flex items-center mt-6 justify-between">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg">
+                {{ article.author_name|first }}
+              </div>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-900">{{ article.author_name }}</p>
+              <p class="text-xs text-gray-500">Writer</p>
+            </div>
+          </div>
+          {% if article.feature_images.first and article.feature_images.first.photo_journalist %}
+          <div class="text-right">
+            <p class="text-sm font-medium text-gray-900">{{ article.feature_images.first.photo_journalist }}</p>
+            <p class="text-xs text-gray-500">Photographer</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Article Content -->
+  <article class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-white shadow-sm rounded-lg p-6 md:p-10">
+      <div class="prose prose-lg max-w-none">
+        {{ article.content|safe }}
+      </div>
+      
+      <!-- Article Metadata -->
+      <div class="mt-12 pt-6 border-t border-gray-200">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p class="text-sm text-gray-500">Published on {{ article.published_at|date:'F j, Y' }}</p>
+            {% if article.published_at != article.updated_at %}
+              <p class="text-xs text-gray-400">Last updated on {{ article.updated_at|date:'F j, Y' }}</p>
+            {% endif %}
+          </div>
+          
+          <!-- Share Buttons -->
+          <div class="flex items-center gap-3">
+            <span class="text-sm text-gray-500">Share:</span>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="text-gray-400 hover:text-[#1877F2] transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+              </svg>
+            </a>
+            <a href="https://x.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ article.title }}" target="_blank" class="text-gray-400 hover:text-black transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Articles -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="bg-white shadow-sm rounded-lg p-6 md:p-10">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8">More from {{ article.category.name }}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {% for related_article in related_articles %}
+          <a href="{% url 'CRU:ArticlePage' related_article.article_id %}" class="group">
+            <div class="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg overflow-hidden mb-4">
+              {% if related_article.feature_images.first %}
+                {% if related_article.feature_images.first.image %}
+                  <img src="{{ related_article.feature_images.first.image.url }}" alt="{{ related_article.title }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300">
+                {% elif related_article.feature_images.first.image_url %}
+                  <img src="{{ related_article.feature_images.first.image_url }}" alt="{{ related_article.title }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300">
+                {% endif %}
+              {% endif %}
+            </div>
+            <div>
+              <span class="{% if related_article.category.name|lower == 'university news' %}category-universitynews{% elif related_article.category.name|lower == 'in photos' %}category-inphotos{% elif related_article.category.name|lower == 'editorial' %}category-editorial{% elif related_article.category.name|lower == 'satire' %}category-satire{% elif related_article.category.name|lower == 'opinion' %}category-opinion{% endif %} px-2 py-1 text-xs mb-2">
+                {{ related_article.category.name|upper }}
+              </span>
+              <h3 class="mt-3 text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">{{ related_article.title }}</h3>
+              <p class="mt-1 text-sm text-gray-500">{{ related_article.created_at|date:'F j, Y' }}</p>
+            </div>
+          </a>
+        {% empty %}
+          <div class="col-span-3 text-center py-8 bg-gray-50 rounded-lg">
+            <p class="text-gray-500">No related articles found in this category.</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock content %}

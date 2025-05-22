@@ -3,82 +3,190 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="{% static 'styles.css' %}">
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
-</head>
-<body>
-  <header>
-    <nav id="navbar" class="navbar">
-      <div class="navbar-logo">
-        <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo">
-      </div>
-      <div class="navbar-right">
-        <ul class="navbar-links">
-          <li><a href="{% url 'CRU:DashboardPending' %}" class="active">Pending</a></li>
-          <li><a href="{% url 'CRU:DashboardPosted' %}" >Posted</a></li>
-          <li><a href="{% url 'CRU:Login' %}" >Logout</a></li>
-        </ul>
-        <a href="#" class="navbar-user">
-          <img src="{% static 'user-icon.png' %}" alt="User Profile" class="user-icon">
-        </a>
-      </div>
-      <div id="bar">&#9776;</div>
-    </nav>
-  </header>
-
-  {% block content %}
-  {% endblock %}
-  <footer id="contact" style="background-color: #27305c;" class="text-white py-6 px-4">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-8 md:gap-16">
-      <div class="w-full max-w-xs md:max-w-sm">
-        <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="w-32 mb-2">
-        <p class="text-light text-xs mb-2">The official student publication of Xavier University – Ateneo de Cagayan</p>
-        <div class="text-xs space-y-1">
-          <p><strong>Contact</strong></p>
-          <p><strong>Address:</strong> STC 302, Xavier University - Ateneo de Cagayan, Cagayan de Oro</p>
-          <p><strong>Email:</strong> <a href="mailto:crusaderpublication@my.xu.edu.ph" class="hover:text-white hover:underline">crusaderpublication@my.xu.edu.ph</a></p>
-        </div>
-        <p class="text-xs mt-2 mb-1"><strong>Follow us!</strong></p>
-        <div class="flex gap-3 items-center">
-          <a href="https://www.facebook.com/thecrusaderpublication" class="transition-transform hover:scale-110"><img src="{% static 'fb-icon.png' %}" alt="Facebook" class="w-3.5 h-3.5 object-contain" /></a>
-          <a href="https://www.instagram.com/thecrusaderpub/" class="transition-transform hover:scale-110"><img src="{% static 'ig-icon.png' %}" alt="Instagram" class="w-3.5 h-3.5 object-contain" /></a>
-          <a href="https://x.com/thecrusaderpub" class="transition-transform hover:scale-110"><img src="{% static 'x-icon.png' %}" alt="Twitter" class="w-3.5 h-3.5 object-contain" /></a>
-          <a href="https://www.tiktok.com/@thecrusaderpub" class="transition-transform hover:scale-110"><img src="{% static 'tiktok-icon.png' %}" alt="TikTok" class="w-3.5 h-3.5 object-contain" /></a>
-        </div>
-      </div>
-      <div class="mt-6 md:mt-0 px-4 md:px-0">
-        <h4 class="text-sm font-semibold mb-2">About</h4>
-        <div class="space-y-1">
-          <a href="#" class="block text-light text-xs hover:text-white hover:underline">About Us</a>
-          <a href="#" class="block text-light text-xs hover:text-white hover:underline">Contact Us</a>
-        </div>
-      </div>
-      <div class="mt-6 md:mt-0 px-4 md:px-0">
-        <h4 class="text-sm font-semibold mb-2">Magazines</h4>
-        <div class="space-y-1">
-          <a href="https://issuu.com/thecrusaderpub" class="block text-light text-xs hover:text-white hover:underline">The Crusader Publication ISSUU</a>
-          <a href="https://issuu.com/thecrusaderpub/docs/the_crusader_sports_magazine_2024" class="block text-light text-xs hover:text-white hover:underline">Latest Release</a>
-        </div>
-      </div>
-    </div>
-    <div class="text-center mt-5 pt-3 text-xs text-light max-w-6xl mx-auto">
-      <p class="mb-0.5">© 2025 The Crusader Publication All Rights Reserved</p>
-      <p>Designed and developed by JDR Tech Devs 2024–2025</p>
-    </div>
-  </footer>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="{% static 'favicon.png' %}" type="image/png">
+  {% block title %}{% endblock title %}
+  <link rel="stylesheet" href="{% static 'styles.css'%}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const menuButton = document.getElementById('bar');
-      const mobileMenu = document.getElementById('mobile-menu');
-      if (menuButton && mobileMenu) {
-        menuButton.addEventListener('click', function() {
-          mobileMenu.classList.toggle('hidden');
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#26366D',
+            secondary: '#0A2566',
+            light: '#d1d5db',
+            dark: '#2b2b2b',
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <!-- CSS moved to styles.css -->
+</head>
+<body class="font-poppins">
+<header class="w-full">
+  <nav id="navbar" class="bg-primary flex justify-between items-center px-4 md:px-8 shadow-md h-[100px] relative">
+    <div class="navbar-logo">
+      <a href="{% url 'CRU:DashboardPending' %}">
+        <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="w-[180px] md:w-[250px] pl-0 md:pl-[70px]">
+      </a>
+    </div>
+    <div class="hidden md:flex items-center gap-6 lg:gap-10">
+      <ul class="flex flex-wrap gap-4 lg:gap-[50px] p-5">
+        <li><a href="{% url 'CRU:DashboardPending' %}" class="relative text-white font-medium hover:text-white {% if request.resolver_match.url_name == 'DashboardPending' %}active-nav-link{% endif %}">Pending</a></li>
+        <li><a href="{% url 'CRU:DashboardPosted' %}" class="relative text-white font-medium hover:text-white {% if request.resolver_match.url_name == 'DashboardPosted' %}active-nav-link{% endif %}">Posted</a></li>
+      </ul>
+      <div class="relative dropdown-container">
+        <button id="profile-dropdown-btn" class="flex items-center focus:outline-none">
+          <img src="{% static 'user-icon.png' %}" alt="User Profile" class="w-12 h-12 rounded-full cursor-pointer">
+        </button>
+        <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50">
+          <div class="py-1" role="menu" aria-orientation="vertical">
+            <a href="{% url 'CRU:EditProfile' %}" class="dropdown-item block px-4 py-2 text-sm font-medium text-gray-900 hover:text-black hover:bg-gray-100" role="menuitem">Edit Profile</a>
+            <a href="{% url 'CRU:Logout' %}" class="dropdown-item block px-4 py-2 text-sm font-medium text-gray-900 hover:text-black hover:bg-gray-100" role="menuitem">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="bar" class="md:hidden text-white text-2xl cursor-pointer">&#9776;</div>
+    <div id="mobile-menu" class="hidden absolute top-[100px] left-0 w-full bg-primary z-50 shadow-md">
+      <ul class="flex flex-col w-full">
+        <li class="border-b border-blue-700"><a href="{% url 'CRU:DashboardPending' %}" class="block py-3 px-4 text-white {% if request.resolver_match.url_name == 'DashboardPending' %}font-bold{% endif %}">Pending</a></li>
+        <li class="border-b border-blue-700"><a href="{% url 'CRU:DashboardPosted' %}" class="block py-3 px-4 text-white {% if request.resolver_match.url_name == 'DashboardPosted' %}font-bold{% endif %}">Posted</a></li>
+        <li class="border-b border-blue-700">
+          <button id="mobile-profile-btn" class="flex items-center justify-between w-full py-3 px-4 text-white">
+            Profile
+            <svg id="mobile-profile-icon" class="w-4 h-4 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          <div id="mobile-profile-menu" class="hidden bg-blue-900">
+            <a href="{% url 'CRU:EditProfile' %}" class="mobile-dropdown-item block py-3 px-8 text-white">Edit Profile</a>
+            <a href="{% url 'CRU:Logout' %}" class="mobile-dropdown-item block py-3 px-8 text-white">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+{% block content %}
+{% endblock %}
+<footer class="bg-primary text-white py-6 px-4">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-8 md:gap-16">
+    <div class="w-full max-w-xs md:max-w-sm">
+      <img src="{% static 'TheCrusaderWhite.png' %}" alt="The Crusader Logo" class="w-32 mb-2">
+      <p class="text-light text-xs mb-2">The official student publication of Xavier University – Ateneo de Cagayan</p>
+      <div class="text-xs space-y-1">
+        <p><strong>Contact</strong></p>
+        <p><strong>Address:</strong> STC 302, Xavier University - Ateneo de Cagayan, Cagayan de Oro</p>
+        <p><strong>Email:</strong> <a href="mailto:crusaderpublication@my.xu.edu.ph" class="hover:text-white hover:underline">crusaderpublication@my.xu.edu.ph</a></p>
+      </div>
+      <p class="text-xs mt-2 mb-1"><strong>Follow us!</strong></p>
+      <div class="flex gap-3 items-center">
+        <a href="https://www.facebook.com/thecrusaderpublication" class="transition-transform hover:scale-110"><img src="{% static 'fb-icon.png' %}" alt="Facebook" class="w-3.5 h-3.5 object-contain" /></a>
+        <a href="https://www.instagram.com/thecrusaderpub/" class="transition-transform hover:scale-110"><img src="{% static 'ig-icon.png' %}" alt="Instagram" class="w-3.5 h-3.5 object-contain" /></a>
+        <a href="https://x.com/thecrusaderpub" class="transition-transform hover:scale-110"><img src="{% static 'x-icon.png' %}" alt="Twitter" class="w-3.5 h-3.5 object-contain" /></a>
+        <a href="https://www.tiktok.com/@thecrusaderpub" class="transition-transform hover:scale-110"><img src="{% static 'tiktok-icon.png' %}" alt="TikTok" class="w-3.5 h-3.5 object-contain" /></a>
+      </div>
+    </div>
+    <div class="mt-6 md:mt-0 px-4 md:px-0">
+      <h4 class="text-sm font-semibold mb-2">About</h4>
+      <div class="space-y-1">
+        <a href="#" class="block text-light text-xs hover:text-white hover:underline">About Us</a>
+        <a href="#" class="block text-light text-xs hover:text-white hover:underline">Contact Us</a>
+      </div>
+    </div>
+    <div class="mt-6 md:mt-0 px-4 md:px-0">
+      <h4 class="text-sm font-semibold mb-2">Magazines</h4>
+      <div class="space-y-1">
+        <a href="https://issuu.com/thecrusaderpub" class="block text-light text-xs hover:text-white hover:underline">The Crusader Publication ISSUU</a>
+        <a href="https://issuu.com/thecrusaderpub/docs/the_crusader_sports_magazine_2024" class="block text-light text-xs hover:text-white hover:underline">Latest Release</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-5 pt-3 text-xs text-light max-w-6xl mx-auto">
+    <p class="mb-0.5"> 2025 The Crusader Publication All Rights Reserved</p>
+    <p>Designed and developed by JDR Tech Devs 2024–2025</p>
+  </div>
+</footer>
+<!-- CSS moved to styles.css -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuButton = document.getElementById('bar');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (menuButton && mobileMenu) {
+      menuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+    
+    
+    const mobileManagementBtn = document.getElementById('mobile-management-btn');
+    const mobileManagementMenu = document.getElementById('mobile-management-menu');
+    const mobileManagementIcon = document.getElementById('mobile-management-icon');
+    if (mobileManagementBtn && mobileManagementMenu) {
+      mobileManagementBtn.addEventListener('click', function() {
+        mobileManagementMenu.classList.toggle('hidden');
+        mobileManagementIcon.classList.toggle('rotate-180');
+      });
+    }
+    
+    
+    const mobileProfileBtn = document.getElementById('mobile-profile-btn');
+    const mobileProfileMenu = document.getElementById('mobile-profile-menu');
+    const mobileProfileIcon = document.getElementById('mobile-profile-icon');
+    if (mobileProfileBtn && mobileProfileMenu) {
+      mobileProfileBtn.addEventListener('click', function() {
+        mobileProfileMenu.classList.toggle('hidden');
+        mobileProfileIcon.classList.toggle('rotate-180');
+      });
+    }
+    
+    
+    function setupDropdown(buttonId, dropdownId) {
+      const button = document.getElementById(buttonId);
+      const dropdown = document.getElementById(dropdownId);
+      
+      if (button && dropdown) {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const allDropdowns = document.querySelectorAll('.absolute.z-50');
+          allDropdowns.forEach(function(item) {
+            if (item.id !== dropdownId && item.classList.contains('dropdown-active')) {
+              item.classList.remove('dropdown-active');
+            }
+          });
+          
+          dropdown.classList.toggle('dropdown-active');
+        });
+        
+        document.addEventListener('click', function(e) {
+          if (!dropdown.contains(e.target) && !button.contains(e.target)) {
+            dropdown.classList.remove('dropdown-active');
+          }
+        });
+        
+        dropdown.addEventListener('click', function(e) {
+          e.stopPropagation();
         });
       }
-    });
-  </script>
+    }
+    
+    
+    setupDropdown('management-dropdown-btn', 'management-dropdown');
+    setupDropdown('profile-dropdown-btn', 'profile-dropdown');
+  });
+</script>
 </body>
 </html>

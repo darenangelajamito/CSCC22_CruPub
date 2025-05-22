@@ -1,8 +1,7 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
+from django.core.exceptions import ValidationError
+import re
 
 class UserRole(models.Model):
    role_id = models.AutoField(primary_key=True)
@@ -31,8 +30,13 @@ class User(models.Model):
    
    def __str__(self):
        return self.username
+   
+   def clean(self):
+       if self.email and not self.email.endswith('@my.xu.edu.ph'):
+           raise ValidationError('Email must be from the @my.xu.edu.ph domain')
        
    def save(self, *args, **kwargs):
+       self.clean()
        if self.password and not self.password.startswith('pbkdf2_sha256$'):
            self.password = make_password(self.password)
        super().save(*args, **kwargs)
@@ -44,7 +48,8 @@ class Article(models.Model):
    article_id = models.AutoField(primary_key=True)
    title = models.CharField(max_length=255)
    content = models.TextField()
-   author = models.ForeignKey(User, on_delete=models.CASCADE)
+   articlecreatedby = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+   author_name = models.CharField(max_length=255, default='')
    status = models.BooleanField(default=False)
    CopyReader_Status = models.BooleanField(default=False)
    Editorial_Status = models.BooleanField(default=False)
@@ -58,9 +63,10 @@ class Article(models.Model):
 
 class FeatureImage(models.Model):
    image_id = models.AutoField(primary_key=True)
-   article = models.ForeignKey(Article, on_delete=models.CASCADE)
-   image_url = models.URLField(max_length=255)
-   photo_journalist = models.TextField(max_length=255)
+   article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='feature_images')
+   image = models.ImageField(upload_to='feature_images/', null=True, blank=True)
+   image_url = models.URLField(max_length=255, null=True, blank=True) 
+   photo_journalist = models.CharField(max_length=255)
    
    def __str__(self):
        return f"Image for {self.article.title}"
